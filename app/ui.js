@@ -67,7 +67,7 @@ export function icon(name, { size = 20, class: cls = "icon" } = {}) {
   svg.setAttribute("stroke-width", "2");
   svg.setAttribute("stroke-linecap", "round");
   svg.setAttribute("stroke-linejoin", "round");
-  svg.className = cls;
+  svg.setAttribute("class", cls);  // SVGElement.className is a read-only SVGAnimatedString — must use setAttribute, not assignment
   svg.innerHTML = PATHS[name] || "";
   return svg;
 }
