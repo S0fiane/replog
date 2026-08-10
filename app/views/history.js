@@ -73,6 +73,14 @@ export async function detail(ctx) {
       )
     );
 
+    // edit button — opens the full editor for this (existing) session, so past
+    // sessions can be corrected/extended, not just viewed.
+    body.append(
+      el("button", { class: "btn primary block", style: "margin-bottom:14px", onclick: () => ctx.navigate(`#/session/${id}`) },
+        icon("edit"), "Edit session"
+      )
+    );
+
     if (session.notes) {
       body.append(el("div", { class: "card", style: "margin-bottom:14px; white-space:pre-wrap; color:var(--muted)" }, session.notes));
     }
