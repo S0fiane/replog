@@ -121,6 +121,14 @@ export async function updateSession(id, patch) {
   return data;
 }
 
+// Mark a session as finished by stamping ended_at. Returns the updated row.
+export async function finishSession(id) {
+  const data = await one(
+    supabase.from("sessions").update({ ended_at: new Date().toISOString() }).eq("id", id).select().single()
+  );
+  return data;
+}
+
 export async function deleteSession(id) {
   await one(supabase.from("sessions").delete().eq("id", id));
 }

@@ -1,12 +1,16 @@
 // Replog — session editor. Add exercises + sets, superset grouping, autosave.
 import {
-  getSession, createSession, updateSession, deleteSession,
+  getSession, createSession, updateSession, deleteSession, finishSession,
   listSetsForSession, addSet, updateSet, deleteSet,
   listExercises, createExercise,
 } from "../db.js";
-import { el, mount, icon, topbar, toast, fmtDateFull, normNum, fmtKg } from "../ui.js";
+import { el, mount, icon, topbar, toast, fmtDateFull, fmtDuration, normNum, fmtKg, setVolume } from "../ui.js";
 
 const SUPERSET_LABELS = ["—", "A", "B", "C"];
+
+// Live elapsed-timer interval for the current editor instance. Cleared at the
+// start of draw() so re-renders/reloads don't leak overlapping intervals.
+let timerInterval = null;
 
 export async function render(ctx) {
   const id = ctx.params?.id;
@@ -72,6 +76,7 @@ export async function render(ctx) {
 
 function draw(body, state, ctx) {
   clear(body);
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
   const { session } = state;
 
   // ---- session header (editable name + date) ----
@@ -86,6 +91,37 @@ function draw(body, state, ctx) {
     )
   );
   body.append(header);
+
+  // ---- timer + finish ----
+  const startMs = session.started_at ? new Date(session.started_at).getTime() : Date.now();
+  const endMs = session.ended_at ? new Date(session.ended_at).getTime() : null;
+  const meta = el("div", { class: "flex between center", style: "margin-bottom:14px" },
+    el("div", { class: "muted num", id: "sess-timer", style: "font-size:1.05rem" }, "…")
+  );
+  const finishBtn = el("button", { class: "btn primary" }, icon("check"), endMs ? "Finished" : "Finish");
+  const tick = () => {
+    const elapsed = (endMs ?? Date.now()) - startMs;
+    meta.querySelector("#sess-timer").textContent = endMs
+      ? `Done · ${fmtDuration(elapsed)}`
+      : `Elapsed ${fmtDuration(elapsed)}`;
+  };
+  tick();
+  if (!endMs) timerInterval = setInterval(tick, 1000);
+  finishBtn.onclick = async () => {
+    if (endMs) return;
+    finishBtn.disabled = true;
+    try {
+      await finishSession(session.id);
+      toast("Session finished");
+      ctx.navigate("#/");
+    } catch (e) {
+      finishBtn.disabled = false;
+      toast("Could not finish: " + e.message, { type: "err" });
+    }
+  };
+  if (endMs) finishBtn.disabled = true;
+  meta.append(finishBtn);
+  body.append(meta);
 
   // persist name/date on blur
   const nameInput = header.querySelector("#sess-name");
@@ -106,9 +142,17 @@ function draw(body, state, ctx) {
   // ---- add-exercise bar ----
   body.append(addExerciseBar(state, blocksWrap));
 
-  // ---- sticky add-set for the last block? use per-block add instead ----
+  // ---- total volume + delete ----
+  let totalVol = 0;
+  state.blocks.forEach((b) => b.sets.forEach((s) => {
+    totalVol += setVolume({ reps: s.reps, weight_kg: s.weight_kg, is_dumbbell: b.isDumbbell });
+  }));
   body.append(
     el("div", { class: "divider" }),
+    el("div", { class: "flex between center", style: "margin-bottom:10px" },
+      el("div", { class: "muted" }, "Total volume"),
+      el("div", { class: "num", style: "font-size:1.2rem" }, `${fmtKg(totalVol)} kg`)
+    ),
     el("div", { class: "flex gap" },
       el("button", { class: "btn danger", style: "flex:1", onclick: () => deleteAndExit(state, ctx) }, icon("trash"), "Delete session")
     )

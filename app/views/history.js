@@ -1,6 +1,6 @@
 // Replog — history list + session detail.
 import { listSessions, getSession, listSetsForSession } from "../db.js";
-import { el, mount, icon, topbar, fmtDate, fmtDateFull, fmtKg, setVolume } from "../ui.js";
+import { el, mount, icon, topbar, fmtDate, fmtDateFull, fmtDuration, fmtKg, setVolume } from "../ui.js";
 
 // ---- list ----
 export async function list(ctx) {
@@ -65,11 +65,20 @@ export async function detail(ctx) {
     if (!session) { clear(body); body.textContent = "Session not found."; return; }
     clear(body);
 
-    // header
+    // header — name, date, and duration (ended_at - started_at) if known
+    const startedMs = session.started_at ? new Date(session.started_at).getTime() : null;
+    const endedMs = session.ended_at ? new Date(session.ended_at).getTime() : null;
+    let durationLine = null;
+    if (startedMs && endedMs) {
+      durationLine = el("div", { class: "muted num" }, `Duration ${fmtDuration(endedMs - startedMs)}`);
+    } else if (startedMs && !endedMs) {
+      durationLine = el("div", { class: "muted" }, "In progress · not finished");
+    }
     body.append(
       el("div", { style: "margin-bottom:14px" },
         el("h1", {}, session.name || "Workout"),
         el("div", { class: "muted" }, fmtDateFull(session.workout_date)),
+        durationLine,
       )
     );
 

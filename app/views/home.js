@@ -21,6 +21,7 @@ export async function render(ctx) {
     }
 
     const sessions = await listSessions({ limit: 30 });
+    const active = sessions.find((s) => !s.ended_at);
 
     // header + start button
     clear(body);
@@ -29,6 +30,15 @@ export async function render(ctx) {
       el("p", { class: "muted", style: "margin:0 0 16px" }, "Start a session and log your lifts."),
       el("button", { class: "btn primary block", style: "margin-bottom:8px", onclick: () => ctx.navigate("#/session/new") },
         icon("plus"), "Start new session"),
+    );
+    // continue the most recent unfinished session, if any
+    if (active) {
+      body.append(
+        el("button", { class: "btn block", style: "margin-bottom:8px", onclick: () => ctx.navigate(`#/session/${active.id}`) },
+          icon("history"), "Continue active session")
+      );
+    }
+    body.append(
       el("div", { class: "divider" }),
       el("div", { class: "flex between center", style: "margin-bottom:10px" },
         el("h2", {}, "Recent"),
@@ -49,7 +59,7 @@ export async function render(ctx) {
 
     const list = el("div", { class: "list" });
     for (const s of sessions.slice(0, 8)) {
-      const item = el("div", { class: "item", onclick: () => ctx.navigate(`#/session-detail/${s.id}`) },
+      const item = el("div", { class: "item", onclick: () => ctx.navigate(`#/session/${s.id}`) },
         el("div", { class: "meta" },
           el("div", { class: "title" }, s.name || "Workout"),
           el("div", { class: "sub" }, fmtDate(s.workout_date))
