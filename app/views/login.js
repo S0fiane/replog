@@ -41,7 +41,7 @@ export function render(_ctx) {
       btn.textContent = "Resend link";
     } catch (err) {
       clear(status);
-      status.append(el("div", { class: "notice", style: "border-color:#3A2224" }, `Could not send link: ${err.message}`));
+      status.append(el("div", { class: "notice", style: "border-color:#3A2224" }, friendlyAuthError(err)));
       btn.textContent = "Try again";
     } finally {
       btn.disabled = false;
@@ -50,3 +50,18 @@ export function render(_ctx) {
 }
 
 function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
+
+// Map raw Supabase auth errors to actionable guidance.
+function friendlyAuthError(err) {
+  const msg = (err && err.message ? err.message : String(err)).toLowerCase();
+  if (/rate.?limit|over_email_send_rate_limit|429|too many/.test(msg)) {
+    return "Too many sign-in emails sent. Supabase limits magic links to a few per hour per email address. Wait about 60 minutes and try again — or enter a different email address.";
+  }
+  if (/user not allowed|signup.*disabled|disabled_signup|not.*authorized/.test(msg)) {
+    return "New sign-ups are disabled for this app. Contact the owner to be added, or enable sign-ups in Supabase → Authentication → Providers → Email.";
+  }
+  if (/network|failed to fetch|load failed|timeout/.test(msg)) {
+    return "Could not reach the server. Check your internet connection and try again.";
+  }
+  return `Could not send link: ${err && err.message ? err.message : err}`;
+}
