@@ -22,3 +22,5 @@ Thumbs.db
 
 # node (if added later)
 node_modules/
+package.json
+package-lock.json
