@@ -57,6 +57,8 @@ async function render() {
   }
   try {
     await route.view(ctx);
+    window.__replogBooted = true;
+    if (window.__replogDeadline) clearTimeout(window.__replogDeadline);
   } catch (err) {
     showError(err);
     return;

@@ -19,26 +19,52 @@
       <div class="boot-text">Replog</div>
     </div>
   </div>
-  <script src="vendor/supabase-js.min.js"></script>
-  <script type="module" src="app/main.js"></script>
   <script>
-    // Boot fallback: if the app hasn't replaced the boot screen within 12s,
-    // show the error so a failed module load isn't invisible.
-    window.addEventListener("load", function () {
-      setTimeout(function () {
+    // EARLY error capture — runs BEFORE the module so a module-eval failure
+    // (which would otherwise never reach main.js's own handler) is surfaced.
+    (function () {
+      function esc(s) {
+        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+      function showErr(msg, src, line) {
+        var app = document.getElementById("app");
+        if (!app) return;
+        app.innerHTML =
+          '<div class="center-screen"><div class="login-card">' +
+          '<div class="mark" style="color:var(--danger)">◆</div>' +
+          '<h1>Replog hit an error</h1>' +
+          '<p class="muted" style="word-break:break-word;white-space:pre-wrap">' + esc(msg) + "</p>" +
+          (src ? '<p class="muted" style="font-size:12px">' + esc(src) + (line ? ":" + esc(line) : "") + "</p>" : "") +
+          '<button class="btn block" onclick="location.reload()">Reload</button>' +
+          "</div></div>";
+      }
+      window.__replogShowErr = showErr;
+      window.addEventListener("error", function (e) {
+        var m = (e.error && e.error.message) || e.message || "(no message)";
+        showErr(m, e.filename, e.lineno);
+      });
+      window.addEventListener("unhandledrejection", function (e) {
+        showErr((e.reason && e.reason.message) || String(e.reason), "", "");
+      });
+      // Deadline: if the module never sets __replogBooted, report why.
+      window.__replogDeadline = setTimeout(function () {
+        if (window.__replogBooted) return;
         var app = document.getElementById("app");
         if (app && app.querySelector(".boot")) {
-          app.innerHTML =
-            '<div class="center-screen"><div class="login-card">' +
-            '<div class="mark" style="color:var(--danger)">◆</div>' +
-            '<h1>Replog failed to start</h1>' +
-            '<p class="muted">The app could not load. Check your connection and ' +
-            '<a href="https://github.com/S0fiane/replog">the repo</a>, then reload.</p>' +
-            '<button class="btn block" onclick="location.reload()">Reload</button>' +
-            '</div></div>';
+          var sdk = window.supabase && typeof window.supabase.createClient === "function" ? "SDK loaded" : "SDK MISSING";
+          showErr("App did not start within 8s (" + sdk + "). Open the browser console (F12) for details.", "", "");
         }
-      }, 12000);
-    });
+      }, 8000);
+    })();
   </script>
+  <script src="vendor/supabase-js.min.js"></script>
+  <script>
+    // Verify the vendored SDK actually loaded before the module tries to use it.
+    if (!window.supabase || typeof window.supabase.createClient !== "function") {
+      if (window.__replogShowErr) window.__replogShowErr("Supabase SDK failed to load (vendor/supabase-js.min.js).", "", "");
+      throw new Error("Supabase SDK missing");
+    }
+  </script>
+  <script type="module" src="app/main.js"></script>
 </body>
 </html>
