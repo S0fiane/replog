@@ -83,7 +83,7 @@ export async function render(ctx) {
         el("div", { class: "empty" },
           el("div", { class: "big" }, "◇"),
           el("div", {}, "No sessions yet."),
-          el("div", { class: "muted", style: "margin-top:6px" }, "Tap “Start new session”, or import your past workouts from Settings.")
+          el("div", { class: "muted", style: "margin-top:6px" }, "Tap “New session” above, pick a program day, or import past workouts from Settings.")
         )
       );
       return;
