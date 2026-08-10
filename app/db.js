@@ -1,6 +1,9 @@
 // Replog — data layer. Supabase client + all queries.
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+// SDK is vendored locally (vendor/supabase-js.min.js, loaded as a classic
+// script in index.html) and exposed as window.supabase — no runtime CDN dep.
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "../config.js";
+
+const { createClient } = window.supabase;
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {

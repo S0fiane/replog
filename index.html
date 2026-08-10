@@ -19,6 +19,26 @@
       <div class="boot-text">Replog</div>
     </div>
   </div>
+  <script src="vendor/supabase-js.min.js"></script>
   <script type="module" src="app/main.js"></script>
+  <script>
+    // Boot fallback: if the app hasn't replaced the boot screen within 12s,
+    // show the error so a failed module load isn't invisible.
+    window.addEventListener("load", function () {
+      setTimeout(function () {
+        var app = document.getElementById("app");
+        if (app && app.querySelector(".boot")) {
+          app.innerHTML =
+            '<div class="center-screen"><div class="login-card">' +
+            '<div class="mark" style="color:var(--danger)">◆</div>' +
+            '<h1>Replog failed to start</h1>' +
+            '<p class="muted">The app could not load. Check your connection and ' +
+            '<a href="https://github.com/S0fiane/replog">the repo</a>, then reload.</p>' +
+            '<button class="btn block" onclick="location.reload()">Reload</button>' +
+            '</div></div>';
+        }
+      }, 12000);
+    });
+  </script>
 </body>
 </html>

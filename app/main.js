@@ -55,9 +55,28 @@ async function render() {
     location.hash = "#/";
     return;
   }
-  await route.view(ctx);
+  try {
+    await route.view(ctx);
+  } catch (err) {
+    showError(err);
+    return;
+  }
   if (currentUser) mountNav();
   else document.querySelector(".bottom-nav")?.remove();
+}
+
+function showError(err) {
+  const app = document.getElementById("app");
+  app.innerHTML = "";
+  const card = el("div", { class: "center-screen" },
+    el("div", { class: "login-card" },
+      el("div", { class: "mark", style: "color:var(--danger)" }, "◆"),
+      el("h1", {}, "Something went wrong"),
+      el("p", { class: "muted" }, err && err.message ? err.message : String(err)),
+      el("button", { class: "btn block", onclick: () => location.reload() }, "Reload")
+    )
+  );
+  app.append(card);
 }
 
 function mountNav() {
@@ -78,10 +97,14 @@ function mountNav() {
 }
 
 // initial auth resolve + subscribe
-(async () => {
-  currentUser = await getCurrentUser();
-  render();
-})();
+// Render immediately (assume logged out → login screen) so the UI never
+// hangs on the network; resolve the real session in the background.
+currentUser = null;
+render();
+
+getCurrentUser()
+  .then((u) => { currentUser = u || null; render(); })
+  .catch(() => { /* already showing login */ });
 
 onAuthChange((user) => {
   currentUser = user;
@@ -89,3 +112,5 @@ onAuthChange((user) => {
 });
 
 window.addEventListener("hashchange", render);
+window.addEventListener("error", (e) => showError(e.error || new Error(e.message)));
+window.addEventListener("unhandledrejection", (e) => showError(e.reason));
