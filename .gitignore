@@ -9,6 +9,10 @@ repro.mjs
 repro2.mjs
 verify.mjs
 verify.png
+verify-icon.mjs
+verify-icon.png
+verify-e2e.mjs
+verify-e2e.png
 
 # OS / editor
 .DS_Store

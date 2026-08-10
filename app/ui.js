@@ -1,10 +1,24 @@
 // Replog — shared UI helpers.
 
+// SVG element names that must be created in the SVG namespace. Without this,
+// chart.js's el("line"/"polyline"/"circle"/"text") would build HTMLUnknownElement
+// nodes that silently fail to render inside an <svg>.
+const SVG_TAGS = new Set([
+  "svg", "g", "line", "polyline", "polygon", "path", "rect", "circle",
+  "ellipse", "text", "tspan", "defs", "use", "clippath", "lineargradient",
+  "radialgradient", "stop", "pattern", "marker", "filter", "image",
+  "foreignobject", "title", "desc",
+]);
+
 export function el(tag, attrs = {}, ...children) {
-  const node = document.createElement(tag);
+  const node = SVG_TAGS.has(tag.toLowerCase())
+    ? document.createElementNS("http://www.w3.org/2000/svg", tag)
+    : document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) {
     if (v == null || v === false) continue;
-    if (k === "class") node.className = v;
+    // setAttribute("class") works for both HTML and SVG; the className PROPERTY
+    // is a read-only SVGAnimatedString on SVG elements, so never assign to it.
+    if (k === "class") node.setAttribute("class", v);
     else if (k === "html") node.innerHTML = v;
     else if (k === "text") node.textContent = v;
     else if (k.startsWith("on") && typeof v === "function")
