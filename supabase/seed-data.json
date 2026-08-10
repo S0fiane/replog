@@ -1,0 +1,251 @@
+{
+  "_comment": "Replog seed data. library = pre-seeded exercise names (is_dumbbell => weight is per-hand, volume x2). aliases = lowercased raw spellings -> canonical name (for future fuzzy import). history = parsed workout history from Downloads/Sport (best-effort dates; edit in-app).",
+  "library": [
+    { "name": "Barbell Bench Press", "is_dumbbell": false },
+    { "name": "Incline Bench Press", "is_dumbbell": false },
+    { "name": "Incline DB Press", "is_dumbbell": true },
+    { "name": "Overhead Press", "is_dumbbell": false },
+    { "name": "Arnold Press", "is_dumbbell": true },
+    { "name": "Back Squat", "is_dumbbell": false },
+    { "name": "Front Squat", "is_dumbbell": false },
+    { "name": "Box Squat", "is_dumbbell": false },
+    { "name": "Goblet Squat", "is_dumbbell": false },
+    { "name": "Deadlift", "is_dumbbell": false },
+    { "name": "Romanian Deadlift", "is_dumbbell": false },
+    { "name": "Barbell Row", "is_dumbbell": false },
+    { "name": "Seated Wide Grip Row", "is_dumbbell": false },
+    { "name": "Close Grip Cable Row", "is_dumbbell": false },
+    { "name": "Lat Pulldown", "is_dumbbell": false },
+    { "name": "Pull-up", "is_dumbbell": false },
+    { "name": "Chin-up", "is_dumbbell": false },
+    { "name": "Single Arm Row", "is_dumbbell": true },
+    { "name": "Bent-over Row (Dumbbell)", "is_dumbbell": true },
+    { "name": "Bent-over Row (Barbell)", "is_dumbbell": false },
+    { "name": "Leg Extension", "is_dumbbell": false },
+    { "name": "Leg Curl (Lying)", "is_dumbbell": false },
+    { "name": "Hammer Curl", "is_dumbbell": true },
+    { "name": "Bicep Curl", "is_dumbbell": false },
+    { "name": "Triceps Cable Extension", "is_dumbbell": false },
+    { "name": "Shoulder Fly Machine", "is_dumbbell": false },
+    { "name": "Upright Row (Kettlebell)", "is_dumbbell": false },
+    { "name": "Gorilla Row", "is_dumbbell": true },
+    { "name": "Kettlebell Swing", "is_dumbbell": false },
+    { "name": "Slam Ball", "is_dumbbell": false },
+    { "name": "Three-Point Single-Arm DB Row", "is_dumbbell": true },
+    { "name": "Chest-Supported DB Row", "is_dumbbell": true }
+  ],
+  "aliases": {
+    "flat bench press": "Barbell Bench Press",
+    "barbell bench press": "Barbell Bench Press",
+    "bench press": "Barbell Bench Press",
+    "bench press barbel": "Barbell Bench Press",
+    "bench press barbell": "Barbell Bench Press",
+    "inclined bench press": "Incline Bench Press",
+    "incline bench": "Incline DB Press",
+    "incline bench (db)": "Incline DB Press",
+    "incline db press": "Incline DB Press",
+    "incline dumbbell press": "Incline DB Press",
+    "fly machine": "Shoulder Fly Machine",
+    "fly shoulder machine": "Shoulder Fly Machine",
+    "lat pulldown": "Lat Pulldown",
+    "lat pull down": "Lat Pulldown",
+    "close-grip cable row": "Close Grip Cable Row",
+    "close grip cable row": "Close Grip Cable Row",
+    "seated wide row": "Seated Wide Grip Row",
+    "seated wide grip row": "Seated Wide Grip Row",
+    "seated wide-grip row": "Seated Wide Grip Row",
+    "single-arm row on the bench": "Single Arm Row",
+    "single-arm row": "Single Arm Row",
+    "single arm row on the bench": "Single Arm Row",
+    "three point signle arm dumbell": "Three-Point Single-Arm DB Row",
+    "three-point single-arm dumbbell row": "Three-Point Single-Arm DB Row",
+    "chest supoorted prone dumbell on incline bench": "Chest-Supported DB Row",
+    "bent-over row attached to bench (2 dumbells)": "Bent-over Row (Dumbbell)",
+    "bent over row (no bench)": "Bent-over Row (Dumbbell)",
+    "bent-over row (free)": "Bent-over Row (Dumbbell)",
+    "bent-over row (free, barbell)": "Bent-over Row (Barbell)",
+    "bent-over row attached to bench": "Bent-over Row (Dumbbell)",
+    "db bent over wide row": "Bent-over Row (Dumbbell)",
+    "gorilla row (kettlebells two kettlebells)": "Gorilla Row",
+    "gorilla row (kettlebells)": "Gorilla Row",
+    "gorilla row (kettlebell)": "Gorilla Row",
+    "upright kettlebell": "Upright Row (Kettlebell)",
+    "upright row with kettlebell": "Upright Row (Kettlebell)",
+    "upright row kb": "Upright Row (Kettlebell)",
+    "upright kb": "Upright Row (Kettlebell)",
+    "up right (kettlebell)": "Upright Row (Kettlebell)",
+    "arnold press": "Arnold Press",
+    "arnold press (db)": "Arnold Press",
+    "hammer curls (db)": "Hammer Curl",
+    "hummer curls": "Hammer Curl",
+    "harmmer curl": "Hammer Curl",
+    "hammer curls": "Hammer Curl",
+    "triceps cable extension": "Triceps Cable Extension",
+    "box squat": "Box Squat",
+    "box squat with kettlebells": "Box Squat",
+    "box squat kb": "Box Squat",
+    "box squat with kettle belts": "Box Squat",
+    "goblet squat": "Goblet Squat",
+    "goblet squat with kettlebell": "Goblet Squat",
+    "full squat with kettlebell": "Goblet Squat",
+    "leg extension": "Leg Extension",
+    "leg extension machine": "Leg Extension",
+    "leg curl lying": "Leg Curl (Lying)",
+    "leg curl lying.": "Leg Curl (Lying)",
+    "slam": "Slam Ball",
+    "slam ball": "Slam Ball",
+    "slam ball 3,6 kg": "Slam Ball"
+  },
+  "history": [
+    {
+      "workout_date": "2026-01-29",
+      "name": "Solo upper body",
+      "notes": "Solo session (Muay Thai cancelled). BW 137kg, 190cm. Warm-up: 10 min bike. ~1h04, 740 kcal. Bench = warm-up only (friend called, session cut).",
+      "exercises": [
+        { "exercise": "Barbell Bench Press", "superset_group": null, "sets": [ { "reps": 0, "weight_kg": 0 }, { "reps": 0, "weight_kg": 20 }, { "reps": 0, "weight_kg": 30 }, { "reps": 0, "weight_kg": 40 } ] },
+        { "exercise": "Incline Bench Press", "superset_group": null, "sets": [ { "reps": 12, "weight_kg": 20 }, { "reps": 10, "weight_kg": 30 }, { "reps": 8, "weight_kg": 40 }, { "reps": 8, "weight_kg": 40 } ] },
+        { "exercise": "Three-Point Single-Arm DB Row", "superset_group": null, "sets": [ { "reps": 15, "weight_kg": 12 }, { "reps": 15, "weight_kg": 12 }, { "reps": 17, "weight_kg": 17.5 }, { "reps": 12, "weight_kg": 22.5 } ] },
+        { "exercise": "Chest-Supported DB Row", "superset_group": null, "sets": [ { "reps": 15, "weight_kg": 12 }, { "reps": 17, "weight_kg": 17.5 }, { "reps": 17, "weight_kg": 17.5 }, { "reps": 10, "weight_kg": 22.5 } ] }
+      ]
+    },
+    {
+      "workout_date": "2026-03-02",
+      "name": "Day 3",
+      "notes": "",
+      "exercises": [
+        { "exercise": "Gorilla Row", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 16 }, { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 20 } ] },
+        { "exercise": "Slam Ball", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 3.6 }, { "reps": 10, "weight_kg": 3.6 }, { "reps": 10, "weight_kg": 3.6 }, { "reps": 10, "weight_kg": 3.6 } ] },
+        { "exercise": "Lat Pulldown", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 39 }, { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 52 }, { "reps": 8, "weight_kg": 52 } ] },
+        { "exercise": "Single Arm Row", "superset_group": null, "sets": [ { "reps": 15, "weight_kg": 14 }, { "reps": 12, "weight_kg": 16 }, { "reps": 10, "weight_kg": 22 }, { "reps": 10, "weight_kg": 22 } ] },
+        { "exercise": "Bent-over Row (Dumbbell)", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 16 }, { "reps": 10, "weight_kg": 16 }, { "reps": 10, "weight_kg": 18 }, { "reps": 10, "weight_kg": 18 } ] },
+        { "exercise": "Close Grip Cable Row", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 39 }, { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 52 } ] },
+        { "exercise": "Triceps Cable Extension", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 14 }, { "reps": 10, "weight_kg": 18 }, { "reps": 10, "weight_kg": 18 }, { "reps": 10, "weight_kg": 24 } ] }
+      ]
+    },
+    {
+      "workout_date": "2026-03-04",
+      "name": "Day 1",
+      "notes": "",
+      "exercises": [
+        { "exercise": "Slam Ball", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 3.6 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 } ] },
+        { "exercise": "Upright Row (Kettlebell)", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 24 } ] },
+        { "exercise": "Box Squat", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 20 } ] },
+        { "exercise": "Leg Curl (Lying)", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 41 }, { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 50 }, { "reps": 10, "weight_kg": 54 } ] },
+        { "exercise": "Leg Extension", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 39 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 59 } ] },
+        { "exercise": "Barbell Bench Press", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 50 }, { "reps": 10, "weight_kg": 60 }, { "reps": 10, "weight_kg": 60 }, { "reps": 5, "weight_kg": 60 } ] },
+        { "exercise": "Shoulder Fly Machine", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 59 }, { "reps": 10, "weight_kg": 66 }, { "reps": 10, "weight_kg": 73 } ] }
+      ]
+    },
+    {
+      "workout_date": "2026-03-06",
+      "name": "Day 2",
+      "notes": "Arnold press set 1 was a compound set 5x14 + 6x12.",
+      "exercises": [
+        { "exercise": "Upright Row (Kettlebell)", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 28 }, { "reps": 10, "weight_kg": 28 } ] },
+        { "exercise": "Slam Ball", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 } ] },
+        { "exercise": "Incline DB Press", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 16 }, { "reps": 10, "weight_kg": 16 }, { "reps": 10, "weight_kg": 22 }, { "reps": 10, "weight_kg": 22 } ] },
+        { "exercise": "Arnold Press", "superset_group": null, "sets": [ { "reps": 5, "weight_kg": 14 }, { "reps": 6, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 8, "weight_kg": 12 } ] },
+        { "exercise": "Seated Wide Grip Row", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 47.3 }, { "reps": 10, "weight_kg": 47.3 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 55.3 } ] },
+        { "exercise": "Barbell Bench Press", "superset_group": null, "sets": [ { "reps": 12, "weight_kg": 40 }, { "reps": 10, "weight_kg": 50 }, { "reps": 10, "weight_kg": 55 }, { "reps": 10, "weight_kg": 60 } ] },
+        { "exercise": "Hammer Curl", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 } ] }
+      ]
+    },
+    {
+      "workout_date": "2026-03-09",
+      "name": "Day 3",
+      "notes": "User explicitly labelled this session 9.",
+      "exercises": [
+        { "exercise": "Gorilla Row", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 24 } ] },
+        { "exercise": "Slam Ball", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 } ] },
+        { "exercise": "Lat Pulldown", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 39 }, { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 54.3 } ] },
+        { "exercise": "Single Arm Row", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 16 }, { "reps": 10, "weight_kg": 18 }, { "reps": 10, "weight_kg": 18 }, { "reps": 10, "weight_kg": 22 } ] },
+        { "exercise": "Bent-over Row (Dumbbell)", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 14 }, { "reps": 10, "weight_kg": 16 }, { "reps": 10, "weight_kg": 16 }, { "reps": 10, "weight_kg": 18 } ] },
+        { "exercise": "Close Grip Cable Row", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 59 }, { "reps": 10, "weight_kg": 59 } ] },
+        { "exercise": "Triceps Cable Extension", "superset_group": null, "sets": [ { "reps": 12, "weight_kg": 18 }, { "reps": 10, "weight_kg": 23 }, { "reps": 10, "weight_kg": 23 }, { "reps": 10, "weight_kg": 23 } ] }
+      ]
+    },
+    {
+      "workout_date": "2026-03-11",
+      "name": "Day 1",
+      "notes": "Switched box squat -> goblet squat (heel propped on a disk). User corrected AI: last time was session 6 not 4.",
+      "exercises": [
+        { "exercise": "Slam Ball", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 } ] },
+        { "exercise": "Upright Row (Kettlebell)", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 24 } ] },
+        { "exercise": "Goblet Squat", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 16 } ] },
+        { "exercise": "Leg Curl (Lying)", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 32 }, { "reps": 10, "weight_kg": 41 }, { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 50 } ] },
+        { "exercise": "Leg Extension", "superset_group": null, "sets": [ { "reps": 12, "weight_kg": 45 }, { "reps": 12, "weight_kg": 52 }, { "reps": 12, "weight_kg": 59 }, { "reps": 12, "weight_kg": 61.3 } ] },
+        { "exercise": "Barbell Bench Press", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 40 }, { "reps": 10, "weight_kg": 50 }, { "reps": 10, "weight_kg": 60 }, { "reps": 10, "weight_kg": 65 } ] },
+        { "exercise": "Shoulder Fly Machine", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 59 }, { "reps": 10, "weight_kg": 59 }, { "reps": 10, "weight_kg": 66 }, { "reps": 10, "weight_kg": 66 } ] }
+      ]
+    },
+    {
+      "workout_date": "2026-03-13",
+      "name": "Day 2",
+      "notes": "Arnold press: left arm failed at rep 7, set 4 dropped to 7x10. Incline bench set 4 was a drop set 6x18 + 6x12. Upright row set 1 = 20 reps.",
+      "exercises": [
+        { "exercise": "Upright Row (Kettlebell)", "superset_group": 1, "sets": [ { "reps": 20, "weight_kg": 16 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 28 } ] },
+        { "exercise": "Slam Ball", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 } ] },
+        { "exercise": "Incline DB Press", "superset_group": null, "sets": [ { "reps": 12, "weight_kg": 18 }, { "reps": 12, "weight_kg": 18 }, { "reps": 10, "weight_kg": 18 }, { "reps": 6, "weight_kg": 18 }, { "reps": 6, "weight_kg": 12 } ] },
+        { "exercise": "Seated Wide Grip Row", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 59 } ] },
+        { "exercise": "Barbell Bench Press", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 60 }, { "reps": 10, "weight_kg": 65 }, { "reps": 7, "weight_kg": 65 }, { "reps": 5, "weight_kg": 65 } ] },
+        { "exercise": "Arnold Press", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 7, "weight_kg": 10 } ] },
+        { "exercise": "Hammer Curl", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 } ] }
+      ]
+    },
+    {
+      "workout_date": "2026-03-16",
+      "name": "Day 3",
+      "notes": "Bench lowered to 30 deg for single-arm row (instead of 45). Gorilla row set 1 = 20 reps (10/side). Close-grip cable row skipped.",
+      "exercises": [
+        { "exercise": "Gorilla Row", "superset_group": 1, "sets": [ { "reps": 20, "weight_kg": 20 }, { "reps": 20, "weight_kg": 20 }, { "reps": 20, "weight_kg": 20 }, { "reps": 10, "weight_kg": 20 } ] },
+        { "exercise": "Slam Ball", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 } ] },
+        { "exercise": "Lat Pulldown", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 52 }, { "reps": 8, "weight_kg": 52 } ] },
+        { "exercise": "Single Arm Row", "superset_group": null, "sets": [ { "reps": 15, "weight_kg": 14 }, { "reps": 15, "weight_kg": 18 }, { "reps": 12, "weight_kg": 20 }, { "reps": 12, "weight_kg": 24 } ] },
+        { "exercise": "Bent-over Row (Barbell)", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 30 }, { "reps": 10, "weight_kg": 30 } ] },
+        { "exercise": "Triceps Cable Extension", "superset_group": null, "sets": [ { "reps": 12, "weight_kg": 18 }, { "reps": 10, "weight_kg": 23 }, { "reps": 10, "weight_kg": 23 }, { "reps": 10, "weight_kg": 23 } ] }
+      ]
+    },
+    {
+      "workout_date": "2026-03-18",
+      "name": "Day 1",
+      "notes": "Leg extension hurt knee on 7th rep of the 8x59 set.",
+      "exercises": [
+        { "exercise": "Slam Ball", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 } ] },
+        { "exercise": "Upright Row (Kettlebell)", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 24 } ] },
+        { "exercise": "Goblet Squat", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 24 } ] },
+        { "exercise": "Leg Curl (Lying)", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 41 }, { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 50 }, { "reps": 10, "weight_kg": 54 } ] },
+        { "exercise": "Leg Extension", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 59 }, { "reps": 8, "weight_kg": 59 } ] },
+        { "exercise": "Barbell Bench Press", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 50 }, { "reps": 10, "weight_kg": 60 }, { "reps": 10, "weight_kg": 60 }, { "reps": 10, "weight_kg": 70 } ] },
+        { "exercise": "Shoulder Fly Machine", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 59 }, { "reps": 10, "weight_kg": 66 } ] }
+      ]
+    },
+    {
+      "workout_date": "2026-03-20",
+      "name": "Day 2",
+      "notes": "Shoulders fine, left elbow sore from hammer curls at 14kg. Hammer curl set 1 = 2x14 + 8x12.",
+      "exercises": [
+        { "exercise": "Upright Row (Kettlebell)", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 20 }, { "reps": 10, "weight_kg": 24 }, { "reps": 10, "weight_kg": 32 }, { "reps": 10, "weight_kg": 32 } ] },
+        { "exercise": "Slam Ball", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 }, { "reps": 10, "weight_kg": 7 } ] },
+        { "exercise": "Incline DB Press", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 18 }, { "reps": 10, "weight_kg": 22 }, { "reps": 10, "weight_kg": 22 }, { "reps": 8, "weight_kg": 22 } ] },
+        { "exercise": "Bent-over Row (Dumbbell)", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 18 }, { "reps": 10, "weight_kg": 18 }, { "reps": 10, "weight_kg": 18 }, { "reps": 10, "weight_kg": 18 } ] },
+        { "exercise": "Barbell Bench Press", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 60 }, { "reps": 8, "weight_kg": 65 }, { "reps": 6, "weight_kg": 65 }, { "reps": 6, "weight_kg": 60 } ] },
+        { "exercise": "Arnold Press", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 8, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 } ] },
+        { "exercise": "Hammer Curl", "superset_group": null, "sets": [ { "reps": 2, "weight_kg": 14 }, { "reps": 8, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 }, { "reps": 10, "weight_kg": 12 } ] }
+      ]
+    },
+    {
+      "workout_date": "2026-03-23",
+      "name": "Day 1",
+      "notes": "Warm-up: 10 min walk ~6.4 km/h incline 10. Capping leg extension ~40kg for next 2-3 Day 1s (knee). Goblet squat = 16 reps x 10 kg.",
+      "exercises": [
+        { "exercise": "Slam Ball", "superset_group": 1, "sets": [ { "reps": 10, "weight_kg": 3.6 }, { "reps": 12, "weight_kg": 7 }, { "reps": 12, "weight_kg": 7 }, { "reps": 12, "weight_kg": 7 } ] },
+        { "exercise": "Upright Row (Kettlebell)", "superset_group": 1, "sets": [ { "reps": 12, "weight_kg": 16 }, { "reps": 12, "weight_kg": 20 }, { "reps": 12, "weight_kg": 20 }, { "reps": 12, "weight_kg": 20 } ] },
+        { "exercise": "Goblet Squat", "superset_group": null, "sets": [ { "reps": 16, "weight_kg": 10 }, { "reps": 16, "weight_kg": 10 }, { "reps": 16, "weight_kg": 10 }, { "reps": 16, "weight_kg": 10 } ] },
+        { "exercise": "Leg Curl (Lying)", "superset_group": null, "sets": [ { "reps": 12, "weight_kg": 36 }, { "reps": 12, "weight_kg": 41 }, { "reps": 12, "weight_kg": 41 }, { "reps": 10, "weight_kg": 45 } ] },
+        { "exercise": "Leg Extension", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 39 }, { "reps": 10, "weight_kg": 39 }, { "reps": 7, "weight_kg": 45 }, { "reps": 12, "weight_kg": 32 } ] },
+        { "exercise": "Barbell Bench Press", "superset_group": null, "sets": [ { "reps": 8, "weight_kg": 60 }, { "reps": 8, "weight_kg": 60 }, { "reps": 6, "weight_kg": 70 }, { "reps": 5, "weight_kg": 70 } ] },
+        { "exercise": "Shoulder Fly Machine", "superset_group": null, "sets": [ { "reps": 10, "weight_kg": 45 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 52 }, { "reps": 10, "weight_kg": 52 } ] }
+      ]
+    }
+  ]
+}

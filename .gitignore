@@ -1,0 +1,11 @@
+# local env / secrets (config.js holds public anon key only, but keep personal overrides out)
+config.local.js
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# node (if added later)
+node_modules/
