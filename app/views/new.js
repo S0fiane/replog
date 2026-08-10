@@ -51,9 +51,9 @@ export async function render(ctx) {
   for (const prog of PROGRAMS) {
     body.append(
       el("div", { class: "divider" }),
-      el("div", { class: "flex between center", style: "margin-bottom:10px" },
-        el("h2", {}, prog.name),
-        prog.coach ? el("span", { class: "muted", style: "font-size:.78rem" }, prog.coach) : null
+      el("div", { style: "margin-bottom:10px" },
+        el("h2", {}, "Pre-sets"),
+        el("div", { class: "muted", style: "font-size:.8rem" }, `${prog.name}${prog.coach ? " · " + prog.coach : ""}`)
       )
     );
     const list = el("div", { class: "list" });

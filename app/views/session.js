@@ -1,6 +1,6 @@
 // Replog — session editor. Add exercises + sets, superset grouping, autosave.
 import {
-  getSession, createSession, updateSession, deleteSession, finishSession, startSession,
+  getSession, createSession, updateSession, deleteSession, finishSession, startSession, resetSession,
   listSetsForSession, addSet, updateSet, deleteSet,
   listExercises, createExercise,
 } from "../db.js";
@@ -95,21 +95,38 @@ function draw(body, state, ctx) {
   // ---- chrono: prepare → start → stop ----
   // Three phases driven by session.started_at / ended_at:
   //   draft    (no started_at) → "Ready" + Start button (stamps started_at)
-  //   active   (started, no ended) → live elapsed timer + Finish button
-  //   finished (ended set)        → frozen total duration + disabled Finished
+  //   active   (started, no ended) → live elapsed timer + Finish + Reset
+  //   finished (ended set)        → frozen total duration + disabled Finished + Reset
   // renderMeta() re-renders just this row in place on a phase change, so
-  // starting/finishing never disturbs the set inputs below it.
+  // starting/finishing/resetting never disturbs the set inputs below it.
   const meta = el("div", { class: "flex between center", style: "margin-bottom:14px" });
   function renderMeta() {
     if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
     clear(meta);
     const timerEl = el("div", { class: "muted num", id: "sess-timer", style: "font-size:1.05rem" });
-    meta.append(timerEl);
+    const actions = el("div", { class: "flex gap" });
     const startMs = session.started_at ? new Date(session.started_at).getTime() : null;
     const endMs = session.ended_at ? new Date(session.ended_at).getTime() : null;
+
+    // Reset (clear start/end → back to draft). Shown in active + finished only.
+    const addReset = () => {
+      const resetBtn = el("button", { class: "btn ghost sm", "aria-label": "Reset timer", title: "Reset timer" }, icon("history"));
+      resetBtn.onclick = async () => {
+        if (!confirm("Reset the timer? This clears the start/end time so you can re-time the session. Your logged sets are kept.")) return;
+        try {
+          const updated = await resetSession(session.id);
+          Object.assign(session, updated);
+          toast("Timer reset");
+          renderMeta();
+        } catch (e) { toast("Could not reset: " + e.message, { type: "err" }); }
+      };
+      actions.append(resetBtn);
+    };
+
     if (endMs && startMs) {
       timerEl.textContent = `Done · ${fmtDuration(endMs - startMs)}`;
-      meta.append(el("button", { class: "btn", disabled: true }, icon("check"), "Finished"));
+      actions.append(el("button", { class: "btn", disabled: true }, icon("check"), "Finished"));
+      addReset();
     } else if (startMs) {
       const tick = () => { timerEl.textContent = `Elapsed ${fmtDuration(Date.now() - startMs)}`; };
       tick();
@@ -127,9 +144,10 @@ function draw(body, state, ctx) {
           toast("Could not finish: " + e.message, { type: "err" });
         }
       };
-      meta.append(finishBtn);
+      actions.append(finishBtn);
+      addReset();
     } else {
-      // draft — prepared but not started yet
+      // draft — prepared but not started yet (no reset needed)
       timerEl.textContent = "Ready · tap Start when you begin";
       const startBtn = el("button", { class: "btn primary" }, icon("play"), "Start");
       startBtn.onclick = async () => {
@@ -144,8 +162,9 @@ function draw(body, state, ctx) {
           toast("Could not start: " + e.message, { type: "err" });
         }
       };
-      meta.append(startBtn);
+      actions.append(startBtn);
     }
+    meta.append(timerEl, actions);
   }
   renderMeta();
   body.append(meta);

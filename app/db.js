@@ -140,6 +140,16 @@ export async function startSession(id) {
   return data;
 }
 
+// Reset the chrono: clear started_at AND ended_at, returning the session to a
+// draft so it can be re-timed. Logged sets are untouched. Used when a session
+// was started/finished by mistake and needs a do-over.
+export async function resetSession(id) {
+  const data = await one(
+    supabase.from("sessions").update({ started_at: null, ended_at: null }).eq("id", id).select().single()
+  );
+  return data;
+}
+
 export async function deleteSession(id) {
   await one(supabase.from("sessions").delete().eq("id", id));
 }
