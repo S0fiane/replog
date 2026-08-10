@@ -1,6 +1,9 @@
 # local env / secrets (config.js holds public anon key only, but keep personal overrides out)
 config.local.js
 
+# OMC / agent state (should never be committed)
+.omc/
+
 # OS / editor
 .DS_Store
 Thumbs.db
