@@ -126,6 +126,21 @@ try {
     render();
   });
 
+  // Safety net for magic-link callbacks: detectSessionInUrl establishes the
+  // session from the URL hash asynchronously, and onAuthStateChange doesn't
+  // always reach us (in-app browsers, cross-tab quirks). Poll briefly so a
+  // session that lands a moment after load still flips us off the login view.
+  (async () => {
+    for (let i = 0; i < 14; i++) {
+      if (currentUser) return;
+      await new Promise((r) => setTimeout(r, 450));
+      try {
+        const u = await getCurrentUser();
+        if (u) { currentUser = u; render(); return; }
+      } catch { /* keep polling */ }
+    }
+  })();
+
   window.addEventListener("hashchange", render);
   window.addEventListener("error", (e) => showError(e.error || new Error(e.message)));
   window.addEventListener("unhandledrejection", (e) => showError(e.reason));

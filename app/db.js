@@ -10,6 +10,12 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
+    // Implicit flow: the magic link carries access_token + refresh_token
+    // directly in the URL hash, so detectSessionInUrl parses them with NO
+    // code exchange. PKCE (the v2 default) breaks on mobile, where clicking
+    // the email opens an in-app webview whose localStorage lacks the
+    // code_verifier — the exchange fails and the user lands back at login.
+    flowType: "implicit",
   },
 });
 

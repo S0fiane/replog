@@ -18,31 +18,17 @@ export async function sendMagicLink(email) {
   return true;
 }
 
-// Email + password sign-in. Primary path — does NOT depend on email delivery,
-// so it's immune to Supabase's built-in mailer rate limits. The account must
-// already exist (created in the Supabase dashboard, or via signUp below).
+// Password sign-in (instant, no email). The user must exist with a password
+// set in the Supabase dashboard (Authentication → Users → Add user →
+// Create new user → set password + Auto Confirm). Used as a fallback so the
+// app works even when Supabase's free-tier magic-link email limit is hit.
 export async function signInWithPassword(email, password) {
   const clean = email.trim().toLowerCase();
   if (!clean) throw new Error("Enter your email");
-  if (!password) throw new Error("Enter your password");
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: clean,
-    password,
-  });
-  if (error) throw error;
-  return data.user;
-}
-
-// Create a new account with email + password. Note: with mailer_autoconfirm on,
-// Supabase sends a confirmation email — which can hit the same rate limit. For a
-// no-email setup, create the user in the dashboard with Auto Confirm = ON instead.
-export async function signUpWithPassword(email, password) {
-  const clean = email.trim().toLowerCase();
-  if (!clean) throw new Error("Enter your email");
   if (!password) throw new Error("Enter a password");
-  const { data, error } = await supabase.auth.signUp({ email: clean, password });
+  const { error } = await supabase.auth.signInWithPassword({ email: clean, password });
   if (error) throw error;
-  return data.user;
+  return true;
 }
 
 export async function getCurrentUser() {

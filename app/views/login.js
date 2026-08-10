@@ -1,5 +1,5 @@
 // Replog — login view (email magic link).
-import { sendMagicLink } from "../auth.js";
+import { sendMagicLink, signInWithPassword } from "../auth.js";
 import { el, mount, icon } from "../ui.js";
 
 export function render(_ctx) {
@@ -13,8 +13,13 @@ export function render(_ctx) {
           el("span", {}, "Email"),
           el("input", { class: "input", type: "email", name: "email", inputmode: "email", placeholder: "you@example.com", required: true, autocomplete: "email" })
         ),
-        el("button", { class: "btn primary block", type: "submit" }, "Send magic link"),
+        el("label", { class: "field" },
+          el("span", {}, "Password"),
+          el("input", { class: "input", type: "password", name: "password", placeholder: "Set one in Supabase → instant sign-in", autocomplete: "current-password" })
+        ),
+        el("button", { class: "btn primary block", type: "submit" }, "Sign in"),
       ),
+      el("div", { class: "muted-2", style: "margin:8px 0 0; font-size:.8rem; line-height:1.45" }, "Enter email + password to sign in instantly. Leave the password empty to get an email magic link instead (slow, and limited on Supabase free)."),
       el("div", { id: "login-status", style: "margin-top:16px" })
     )
   );
@@ -26,19 +31,28 @@ export function render(_ctx) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = form.email.value;
+    const pw = form.password.value;
     const btn = form.querySelector("button");
     btn.disabled = true;
-    btn.textContent = "Sending…";
+    btn.textContent = pw ? "Signing in…" : "Sending…";
     try {
-      await sendMagicLink(email);
-      clear(status);
-      status.append(
-        el("div", { class: "notice" },
-          el("div", { style: "font-weight:600; margin-bottom:4px" }, "Check your email"),
-          el("div", { class: "muted" }, `A sign-in link was sent to ${email}. Click it to open Replog.`)
-        )
-      );
-      btn.textContent = "Resend link";
+      if (pw) {
+        // Instant password sign-in — no email, no redirect, no rate limit.
+        await signInWithPassword(email, pw);
+        clear(status);
+        status.append(el("div", { class: "notice" }, el("div", { style: "font-weight:600" }, "Signed in — loading…")));
+        // onAuthChange will fire and re-render to the home view.
+      } else {
+        await sendMagicLink(email);
+        clear(status);
+        status.append(
+          el("div", { class: "notice" },
+            el("div", { style: "font-weight:600; margin-bottom:4px" }, "Check your email"),
+            el("div", { class: "muted" }, `A sign-in link was sent to ${email}. Click it to open Replog.`)
+          )
+        );
+        btn.textContent = "Resend link";
+      }
     } catch (err) {
       clear(status);
       status.append(el("div", { class: "notice", style: "border-color:#3A2224" }, friendlyAuthError(err)));
@@ -56,6 +70,9 @@ function friendlyAuthError(err) {
   const msg = (err && err.message ? err.message : String(err)).toLowerCase();
   if (/rate.?limit|over_email_send_rate_limit|429|too many/.test(msg)) {
     return "Supabase's email limit is temporarily reached (free tier sends ~3–4/hour). You don't have to wait: open an earlier sign-in email from your inbox and click that link — links stay valid for ~24h. Otherwise wait about 60 minutes and try again.";
+  }
+  if (/invalid.*login.*credentials|invalid.*credentials|wrong.*password|credentials.*invalid/.test(msg)) {
+    return "Wrong email or password. Make sure the user exists in Supabase with this password (Authentication → Users) and is auto-confirmed. Or leave the password empty to use a magic link.";
   }
   if (/user not allowed|signup.*disabled|disabled_signup|not.*authorized/.test(msg)) {
     return "New sign-ups are disabled for this app. Contact the owner to be added, or enable sign-ups in Supabase → Authentication → Providers → Email.";
