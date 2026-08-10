@@ -111,18 +111,30 @@ function mountNav() {
 // initial auth resolve + subscribe
 // Render immediately (assume logged out → login screen) so the UI never
 // hangs on the network; resolve the real session in the background.
-currentUser = null;
-render();
-
-getCurrentUser()
-  .then((u) => { currentUser = u || null; render(); })
-  .catch(() => { /* already showing login */ });
-
-onAuthChange((user) => {
-  currentUser = user;
+// Wrapped so ANY init-time throw surfaces a precise message on screen
+// instead of the silent boot-screen deadline.
+try {
+  currentUser = null;
   render();
-});
 
-window.addEventListener("hashchange", render);
-window.addEventListener("error", (e) => showError(e.error || new Error(e.message)));
-window.addEventListener("unhandledrejection", (e) => showError(e.reason));
+  getCurrentUser()
+    .then((u) => { currentUser = u || null; render(); })
+    .catch(() => { /* already showing login */ });
+
+  onAuthChange((user) => {
+    currentUser = user;
+    render();
+  });
+
+  window.addEventListener("hashchange", render);
+  window.addEventListener("error", (e) => showError(e.error || new Error(e.message)));
+  window.addEventListener("unhandledrejection", (e) => showError(e.reason));
+} catch (initErr) {
+  if (window.__replogShowErr) {
+    window.__replogShowErr(
+      "init: " + ((initErr && initErr.message) || String(initErr)),
+      (initErr && initErr.stack) ? String(initErr.stack).split("\n").slice(0, 2).join(" | ") : "",
+      ""
+    );
+  }
+}
