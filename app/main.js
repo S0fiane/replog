@@ -46,12 +46,23 @@ let currentUser = null;
 
 async function render() {
   const { route } = parseRoute();
-  // auth gate
-  if (!currentUser && route.re.source !== "^#/login$") {
-    location.hash = "#/login";
+  // No session yet: render the login view DIRECTLY. Do not redirect via hash —
+  // relying on a hashchange event to re-trigger render() is unreliable on load
+  // and left the boot screen stuck.
+  if (!currentUser) {
+    try {
+      await login.render();
+      window.__replogBooted = true;
+      if (window.__replogDeadline) clearTimeout(window.__replogDeadline);
+    } catch (err) {
+      showError(err);
+      return;
+    }
+    document.querySelector(".bottom-nav")?.remove();
     return;
   }
-  if (currentUser && route.re.source === "^#/login$") {
+  // Logged in but still on #/login → send home.
+  if (route.re.source === "^#/login$") {
     location.hash = "#/";
     return;
   }
@@ -63,8 +74,7 @@ async function render() {
     showError(err);
     return;
   }
-  if (currentUser) mountNav();
-  else document.querySelector(".bottom-nav")?.remove();
+  mountNav();
 }
 
 function showError(err) {
