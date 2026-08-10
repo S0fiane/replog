@@ -133,6 +133,65 @@ export async function deleteSession(id) {
   await one(supabase.from("sessions").delete().eq("id", id));
 }
 
+// Start a new session pre-filled from a program-day template (see programs.js).
+// Creates the session, resolves/creates each exercise against the library, and
+// bulk-inserts the prescribed sets: reps pre-filled, weight pre-filled only
+// where the template specifies one (e.g. Slam Ball 3.6kg), rest left blank to
+// fill in at the gym. Superset pairs share a superset_group. set_index restarts
+// at 1 per exercise to match the editor's per-block convention. Returns the new
+// session row so the caller can navigate to #/session/<id>.
+export async function startProgramDay(day) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("Not signed in");
+
+  const session = await one(
+    supabase
+      .from("sessions")
+      .insert({
+        user_id: user.id,
+        name: day.label || null,
+        workout_date: new Date().toISOString().slice(0, 10),
+        started_at: new Date().toISOString(),
+      })
+      .select()
+      .single()
+  );
+
+  const library = await listExercises();
+  const byName = new Map(library.map((e) => [e.name.toLowerCase(), e]));
+
+  const setRows = [];
+  for (const slot of day.slots) {
+    // "A" -> 1, "B" -> 2, … ; null for non-superset slots
+    const group = slot.superset ? slot.superset.charCodeAt(0) - 64 : null;
+    for (const ex of slot.exercises) {
+      let lib = byName.get(ex.name.toLowerCase());
+      if (!lib) {
+        // template referenced a name not in the library — create it on the fly
+        lib = await createExercise(ex.name, { isDumbbell: !!ex.isDumbbell });
+        byName.set(lib.name.toLowerCase(), lib);
+      }
+      for (let i = 0; i < (ex.sets || 0); i++) {
+        setRows.push({
+          user_id: user.id,
+          session_id: session.id,
+          exercise_id: lib.id,
+          set_index: i + 1,
+          reps: ex.reps ?? 0,
+          weight_kg: ex.weight != null ? ex.weight : null,
+          rest_sec: null,
+          superset_group: group,
+        });
+      }
+    }
+  }
+
+  if (setRows.length) await insertSets(setRows);
+  return session;
+}
+
 /* ---------------- sets ---------------- */
 
 // Returns sets for a session, joined with exercise name.

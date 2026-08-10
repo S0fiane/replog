@@ -1,7 +1,12 @@
 // Replog — home view: start/continue session, recent sessions.
-import { listSessions, listSetsForSession } from "../db.js";
+import { listSessions, listSetsForSession, startProgramDay } from "../db.js";
 import { seedLibrary, libraryIsEmpty } from "../seed.js";
+import { PROGRAMS, dayExerciseNames } from "../programs.js";
 import { el, mount, icon, topbar, fmtDate, fmtKg, setVolume, toast } from "../ui.js";
+
+// Guard against double-taps while a program day is being created (several DB
+// round-trips) — prevents two sessions from being spun up.
+let startingDay = false;
 
 export async function render(ctx) {
   const root = el("div", {},
@@ -38,6 +43,33 @@ export async function render(ctx) {
           icon("history"), "Continue active session")
       );
     }
+
+    // program templates — tap a day to start a pre-filled session
+    for (const prog of PROGRAMS) {
+      body.append(
+        el("div", { class: "divider" }),
+        el("div", { class: "flex between center", style: "margin-bottom:10px" },
+          el("h2", {}, prog.name),
+          prog.coach ? el("span", { class: "muted", style: "font-size:.78rem" }, prog.coach) : null
+        )
+      );
+      const plist = el("div", { class: "list" });
+      for (const day of prog.days) {
+        const full = dayExerciseNames(day).join(" · ");
+        const sub = full.length > 56 ? full.slice(0, 55) + "…" : full;
+        plist.append(
+          el("div", { class: "item", onclick: () => startDay(day, ctx) },
+            el("div", { class: "meta" },
+              el("div", { class: "title" }, day.label),
+              el("div", { class: "sub" }, sub)
+            ),
+            el("div", { class: "chev" }, icon("chevron"))
+          )
+        );
+      }
+      body.append(plist);
+    }
+
     body.append(
       el("div", { class: "divider" }),
       el("div", { class: "flex between center", style: "margin-bottom:10px" },
@@ -84,3 +116,19 @@ export async function render(ctx) {
 }
 
 function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
+
+// Start a pre-filled session from a program-day template, then open the editor.
+async function startDay(day, ctx) {
+  if (startingDay) return;
+  startingDay = true;
+  toast(`Starting ${day.label}…`);
+  try {
+    const s = await startProgramDay(day);
+    toast(`${day.label} ready`);
+    ctx.navigate(`#/session/${s.id}`);
+  } catch (e) {
+    toast("Could not start: " + e.message, { type: "err" });
+  } finally {
+    startingDay = false;
+  }
+}
