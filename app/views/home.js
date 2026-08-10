@@ -1,5 +1,5 @@
 // Replog — home view: start/continue session, recent sessions.
-import { listSessions, listSetsForSession, startProgramDay } from "../db.js";
+import { listSessions, listSetsForSession, prepareProgramDay } from "../db.js";
 import { seedLibrary, libraryIsEmpty } from "../seed.js";
 import { PROGRAMS, dayExerciseNames } from "../programs.js";
 import { el, mount, icon, topbar, fmtDate, fmtKg, setVolume, toast } from "../ui.js";
@@ -34,13 +34,13 @@ export async function render(ctx) {
       el("h1", { style: "margin-bottom:6px" }, "Workouts"),
       el("p", { class: "muted", style: "margin:0 0 16px" }, "Start a session and log your lifts."),
       el("button", { class: "btn primary block", style: "margin-bottom:8px", onclick: () => ctx.navigate("#/session/new") },
-        icon("plus"), "Start new session"),
+        icon("plus"), "New session"),
     );
-    // continue the most recent unfinished session, if any
+    // continue the most recent open session (draft or active), if any
     if (active) {
       body.append(
         el("button", { class: "btn block", style: "margin-bottom:8px", onclick: () => ctx.navigate(`#/session/${active.id}`) },
-          icon("history"), "Continue active session")
+          icon("history"), "Continue open session")
       );
     }
 
@@ -117,14 +117,16 @@ export async function render(ctx) {
 
 function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
 
-// Start a pre-filled session from a program-day template, then open the editor.
+// Prepare a pre-filled session from a program-day template, then open the
+// editor. The session is created as a draft — the user taps Start in the
+// editor to begin the chrono. Tap-guarded to prevent duplicate sessions.
 async function startDay(day, ctx) {
   if (startingDay) return;
   startingDay = true;
-  toast(`Starting ${day.label}…`);
+  toast(`Preparing ${day.label}…`);
   try {
-    const s = await startProgramDay(day);
-    toast(`${day.label} ready`);
+    const s = await prepareProgramDay(day);
+    toast(`${day.label} ready — tap Start when you begin`);
     ctx.navigate(`#/session/${s.id}`);
   } catch (e) {
     toast("Could not start: " + e.message, { type: "err" });

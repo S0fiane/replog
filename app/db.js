@@ -98,6 +98,8 @@ export async function createSession({ name = null, workoutDate = null, notes = n
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Not signed in");
   const date = workoutDate || new Date().toISOString().slice(0, 10);
+  // Created as a DRAFT: started_at is null until the user explicitly taps
+  // Start in the editor. This supports the prepare → start → stop lifecycle.
   const data = await one(
     supabase
       .from("sessions")
@@ -106,7 +108,6 @@ export async function createSession({ name = null, workoutDate = null, notes = n
         name,
         workout_date: date,
         notes,
-        started_at: new Date().toISOString(),
       })
       .select()
       .single()
@@ -129,18 +130,30 @@ export async function finishSession(id) {
   return data;
 }
 
+// Begin a prepared (draft) session by stamping started_at. The editor only
+// shows the Start control when started_at is null, so this is only called once
+// per session. Returns the updated row.
+export async function startSession(id) {
+  const data = await one(
+    supabase.from("sessions").update({ started_at: new Date().toISOString() }).eq("id", id).select().single()
+  );
+  return data;
+}
+
 export async function deleteSession(id) {
   await one(supabase.from("sessions").delete().eq("id", id));
 }
 
-// Start a new session pre-filled from a program-day template (see programs.js).
-// Creates the session, resolves/creates each exercise against the library, and
-// bulk-inserts the prescribed sets: reps pre-filled, weight pre-filled only
-// where the template specifies one (e.g. Slam Ball 3.6kg), rest left blank to
-// fill in at the gym. Superset pairs share a superset_group. set_index restarts
-// at 1 per exercise to match the editor's per-block convention. Returns the new
-// session row so the caller can navigate to #/session/<id>.
-export async function startProgramDay(day) {
+// Prepare a new session pre-filled from a program-day template (see
+// programs.js). Creates the session as a DRAFT (no started_at — the user
+// starts the chrono explicitly in the editor), resolves/creates each exercise
+// against the library, and bulk-inserts the prescribed sets: reps pre-filled,
+// weight pre-filled only where the template specifies one (e.g. Slam Ball
+// 3.6kg), rest left blank to fill in at the gym. Superset pairs share a
+// superset_group. set_index restarts at 1 per exercise to match the editor's
+// per-block convention. Returns the new session row so the caller can navigate
+// to #/session/<id>.
+export async function prepareProgramDay(day) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -153,7 +166,6 @@ export async function startProgramDay(day) {
         user_id: user.id,
         name: day.label || null,
         workout_date: new Date().toISOString().slice(0, 10),
-        started_at: new Date().toISOString(),
       })
       .select()
       .single()
