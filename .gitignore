@@ -13,8 +13,8 @@ verify-icon.mjs
 verify-icon.png
 verify-e2e.mjs
 verify-e2e.png
-verify-login.mjs
-verify-roundtrip.mjs
+verify-cb.mjs
+verify-cb.png
 
 # OS / editor
 .DS_Store
