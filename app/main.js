@@ -3,6 +3,7 @@ import { onAuthChange, getCurrentUser } from "./auth.js";
 import { el, clear, icon } from "./ui.js";
 import * as login from "./views/login.js";
 import * as home from "./views/home.js";
+import * as newView from "./views/new.js";
 import * as session from "./views/session.js";
 import * as history from "./views/history.js";
 import * as exercise from "./views/exercise.js";
@@ -11,6 +12,7 @@ import * as settings from "./views/settings.js";
 const routes = [
   { re: /^#\/login$/, view: () => login.render() },
   { re: /^#\/$/, view: (ctx) => home.render(ctx) },
+  { re: /^#\/new$/, view: (ctx) => newView.render(ctx) },
   { re: /^#\/session\/([\w-]+)$/, view: (ctx) => session.render(ctx) },
   { re: /^#\/history$/, view: (ctx) => history.list(ctx) },
   { re: /^#\/session-detail\/([\w-]+)$/, view: (ctx) => history.detail(ctx) },

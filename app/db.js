@@ -192,7 +192,10 @@ export async function prepareProgramDay(day) {
           exercise_id: lib.id,
           set_index: i + 1,
           reps: ex.reps ?? 0,
-          weight_kg: ex.weight != null ? ex.weight : null,
+          // weight_kg is NOT NULL (schema default 0); the editor inserts 0 for
+          // empty weight, so pre-filled-but-unknown weights use 0 too. Only the
+          // one prescribed weight (Slam Ball 3.6kg) is non-zero.
+          weight_kg: ex.weight != null ? ex.weight : 0,
           rest_sec: null,
           superset_group: group,
         });
