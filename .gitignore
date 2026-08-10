@@ -4,6 +4,9 @@ config.local.js
 # OMC / agent state (should never be committed)
 .omc/
 
+# local repro/debug scripts
+repro.mjs
+
 # OS / editor
 .DS_Store
 Thumbs.db

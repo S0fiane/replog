@@ -65,6 +65,21 @@
       throw new Error("Supabase SDK missing");
     }
   </script>
-  <script type="module" src="app/main.js"></script>
+  <script type="module">
+    // Dynamic import so a module-eval failure rejects with the real error
+    // (static <script type=module> errors often don't reach window.onerror).
+    try {
+      await import("./app/main.js");
+    } catch (err) {
+      console.error("Replog module load failed:", err);
+      if (window.__replogShowErr) {
+        window.__replogShowErr(
+          (err && err.message) || String(err),
+          (err && err.stack) ? String(err.stack).split("\n").slice(0, 2).join(" | ") : "",
+          ""
+        );
+      }
+    }
+  </script>
 </body>
 </html>
